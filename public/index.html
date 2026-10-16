@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>StudyMate AI — Learn smarter</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="StudyMate AI home">
+        <span class="brand-icon">✦</span><span>StudyMate <b>AI</b></span>
+      </a>
+      <span class="status"><span class="dot"></span> Your AI study buddy</span>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">YOUR PERSONAL STUDY ASSISTANT</div>
+      <h1>Learn anything.<br><span>One question at a time.</span></h1>
+      <p class="subhead">Understand difficult topics, create quick notes, and test your knowledge with Gemma.</p>
+    </section>
+
+    <section class="workspace">
+      <label for="topic">What are you learning today?</label>
+      <textarea id="topic" maxlength="5000" placeholder="Try: Explain photosynthesis in simple words…"></textarea>
+      <div class="quick-prompts">
+        <button class="chip" data-prompt="Explain HTML, CSS and JavaScript and how they work together.">💻 Web development</button>
+        <button class="chip" data-prompt="Explain photosynthesis in simple words with an example.">🌱 Photosynthesis</button>
+        <button class="chip" data-prompt="Explain machine learning to a beginner.">🧠 Machine learning</button>
+      </div>
+
+      <div class="actions">
+        <div class="mode-wrap">
+          <label for="mode">Study mode</label>
+          <select id="mode">
+            <option value="explain">Explain simply</option>
+            <option value="summary">Make study notes</option>
+            <option value="quiz">Create a quiz</option>
+          </select>
+        </div>
+        <button id="ask" class="primary">Ask Gemma <span aria-hidden="true">↗</span></button>
+      </div>
+      <p id="status" class="status-message" role="status">Ready when you are.</p>
+    </section>
+
+    <section id="answer-card" class="answer-card" hidden>
+      <div class="answer-heading"><span class="sparkle">✦</span><h2>Your study guide</h2></div>
+      <div id="answer" class="answer" aria-live="polite"></div>
+      <button id="copy" class="secondary">Copy answer</button>
+    </section>
+
+    <footer>
+      <span>Built for curious minds ✦</span>
+      <span>Powered by Gemma · Verify important facts</span>
+    </footer>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
