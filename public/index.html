@@ -3,59 +3,201 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111827">
-  <title>StudyMate AI — Learn smarter</title>
+  <meta name="theme-color" content="#070a14">
+  <title>StudyMate AI — Frozen Glass Study Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/vendor/highlight.min.css">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+  <!-- Ambient frosted glass light orbs -->
+  <div class="ambient-glow" aria-hidden="true">
+    <div class="glass-orb orb-cyan"></div>
+    <div class="glass-orb orb-purple"></div>
+    <div class="glass-orb orb-blue"></div>
+  </div>
+
   <main class="shell">
-    <header class="topbar">
+    <!-- Topbar navigation -->
+    <header class="topbar glass-card">
       <a class="brand" href="/" aria-label="StudyMate AI home">
-        <span class="brand-icon">✦</span><span>StudyMate <b>AI</b></span>
+        <span class="brand-badge">
+          <span class="brand-sparkle">✦</span>
+        </span>
+        <div class="brand-text">
+          <span class="brand-title">StudyMate <span class="gradient-text">AI</span></span>
+          <span class="brand-tag">Frozen Glass Edition</span>
+        </div>
       </a>
-      <span class="status"><span class="dot"></span> Your AI study buddy</span>
+      <div class="topbar-actions">
+        <div class="status-badge glass-pill">
+          <span class="pulse-dot"></span>
+          <span id="model-tag">Gemma 4 Ready</span>
+        </div>
+        <button id="btn-clear-chat" class="glass-icon-btn" title="Clear conversation history">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+          </svg>
+          <span class="btn-label">Reset</span>
+        </button>
+      </div>
     </header>
 
+    <!-- Hero banner -->
     <section class="hero">
-      <div class="eyebrow">YOUR PERSONAL STUDY ASSISTANT</div>
-      <h1>Learn anything.<br><span>One question at a time.</span></h1>
-      <p class="subhead">Understand difficult topics, create quick notes, and test your knowledge with Gemma.</p>
+      <div class="hero-chip glass-pill">
+        <span class="ice-icon">❄</span>
+        <span>INTELLIGENT MULTIMODAL TUTOR</span>
+      </div>
+      <h1 class="hero-title">
+        Learn Smarter.<br>
+        <span class="gradient-text">One Concept at a Time.</span>
+      </h1>
+      <p class="hero-subhead">
+        Ask complex questions, attach study diagrams, notes or PDFs, and get ChatGPT-style structured explanations powered by Google Gemma.
+      </p>
     </section>
 
-    <section class="workspace">
-      <label for="topic">What are you learning today?</label>
-      <textarea id="topic" maxlength="5000" placeholder="Try: Explain photosynthesis in simple words…"></textarea>
-      <div class="quick-prompts">
-        <button class="chip" data-prompt="Explain HTML, CSS and JavaScript and how they work together.">💻 Web development</button>
-        <button class="chip" data-prompt="Explain photosynthesis in simple words with an example.">🌱 Photosynthesis</button>
-        <button class="chip" data-prompt="Explain machine learning to a beginner.">🧠 Machine learning</button>
+    <!-- Study Prompt Workspace -->
+    <section class="workspace glass-card" id="drop-zone">
+      <div class="mode-selector" role="tablist" aria-label="Study modes">
+        <button class="mode-tab active" data-mode="explain" role="tab" aria-selected="true">
+          <span class="tab-icon">💡</span>
+          <span class="tab-text">Explain Simply</span>
+        </button>
+        <button class="mode-tab" data-mode="summary" role="tab" aria-selected="false">
+          <span class="tab-icon">📝</span>
+          <span class="tab-text">Study Notes</span>
+        </button>
+        <button class="mode-tab" data-mode="quiz" role="tab" aria-selected="false">
+          <span class="tab-icon">🎯</span>
+          <span class="tab-text">Practice Quiz</span>
+        </button>
       </div>
 
-      <div class="actions">
-        <div class="mode-wrap">
-          <label for="mode">Study mode</label>
-          <select id="mode">
-            <option value="explain">Explain simply</option>
-            <option value="summary">Make study notes</option>
-            <option value="quiz">Create a quiz</option>
-          </select>
+      <!-- File Attachment Preview Area (Hidden when empty) -->
+      <div id="file-preview-card" class="file-preview-card glass-panel" hidden>
+        <div class="preview-media-box" id="preview-media-box">
+          <!-- Thumbnail image or Document icon injected dynamically -->
         </div>
-        <button id="ask" class="primary">Ask Gemma <span aria-hidden="true">↗</span></button>
+        <div class="file-info">
+          <div class="file-name" id="file-preview-name">lecture-notes.pdf</div>
+          <div class="file-size" id="file-preview-size">1.4 MB · Ready for analysis</div>
+        </div>
+        <button type="button" id="btn-remove-file" class="remove-file-btn" title="Remove attached file">
+          ✕
+        </button>
       </div>
-      <p id="status" class="status-message" role="status">Ready when you are.</p>
+
+      <!-- Main Textarea with Frosted Glow -->
+      <div class="input-wrapper">
+        <textarea
+          id="topic"
+          maxlength="8000"
+          placeholder="Ask a question, paste notes, or drop images & documents here…"
+          rows="3"
+        ></textarea>
+        
+        <!-- Drag & Drop Overlay Indicator -->
+        <div class="drag-overlay" id="drag-overlay">
+          <div class="drag-content">
+            <span class="drag-icon">📂</span>
+            <span class="drag-text">Drop your file to attach</span>
+            <span class="drag-sub">Supports PDF, PNG, JPG, WEBP, DOCX, & code files</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Suggested Prompts -->
+      <div class="quick-prompts">
+        <span class="prompts-label">Quick start:</span>
+        <button type="button" class="chip glass-chip" data-prompt="Explain how neural networks and deep learning work for a beginner with a clear analogy.">
+          🧠 Neural Networks
+        </button>
+        <button type="button" class="chip glass-chip" data-prompt="Explain the difference between photosynthesis and cellular respiration with key equations.">
+          🌱 Photosynthesis
+        </button>
+        <button type="button" class="chip glass-chip" data-prompt="Explain how DNS resolution works step-by-step from browser URL to IP address.">
+          🌐 DNS Resolution
+        </button>
+        <button type="button" class="chip glass-chip" data-prompt="Provide a simple overview of Calculus derivatives and why they are useful in physics.">
+          📐 Calculus Derivatives
+        </button>
+      </div>
+
+      <!-- Action Toolbar -->
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <!-- Hidden File Input -->
+          <input
+            type="file"
+            id="file-input"
+            accept=".png,.jpg,.jpeg,.webp,.gif,.pdf,.docx,.txt,.md,.json,.csv,.js,.ts,.py,.html,.css"
+            style="display: none;"
+          >
+          <button type="button" id="btn-attach" class="glass-btn attach-btn" title="Upload image, PDF, or document">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+            </svg>
+            <span>Attach File</span>
+          </button>
+          <span class="hint-text">Images, PDFs, Docs & Code</span>
+        </div>
+
+        <div class="toolbar-right">
+          <span id="char-count" class="char-count">0 / 8000</span>
+          <button type="button" id="ask" class="primary-btn glass-glow-btn">
+            <span class="btn-text">Ask Gemma</span>
+            <span class="btn-sparkle" aria-hidden="true">✦</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Status banner -->
+      <div id="status-bar" class="status-bar" role="status">
+        <span class="status-dot"></span>
+        <span id="status-text">Ready to learn. Type your question or attach a file.</span>
+      </div>
     </section>
 
-    <section id="answer-card" class="answer-card" hidden>
-      <div class="answer-heading"><span class="sparkle">✦</span><h2>Your study guide</h2></div>
-      <div id="answer" class="answer" aria-live="polite"></div>
-      <button id="copy" class="secondary">Copy answer</button>
+    <!-- ChatGPT-Style Conversation Tunnel & Timeline -->
+    <section id="chat-timeline" class="chat-timeline" aria-live="polite">
+      <!-- Chat message pairs (User Prompt + Gemma Answer) will be appended dynamically here -->
     </section>
 
-    <footer>
-      <span>Built for curious minds ✦</span>
-      <span>Powered by Gemma · Verify important facts</span>
+    <!-- Empty State Placeholder (when no answers generated yet) -->
+    <div id="empty-state" class="empty-state glass-card">
+      <div class="empty-icon-ring">
+        <span class="empty-icon">❄</span>
+      </div>
+      <h3>Your Study Timeline is Clean</h3>
+      <p>Select a mode above, type any academic topic or upload study materials (PDF, screenshots, homework questions), and ask Gemma for an interactive study guide.</p>
+    </div>
+
+    <!-- Frosted Glass Footer -->
+    <footer class="footer">
+      <div class="footer-left">
+        <span>StudyMate AI · Frozen Glass Design</span>
+        <span class="bullet">·</span>
+        <span>Built with Google Gemma</span>
+      </div>
+      <div class="footer-right">
+        <span>Always verify academic formulas & critical facts</span>
+      </div>
     </footer>
   </main>
+
+  <!-- Notification Toast Container -->
+  <div id="toast" class="toast glass-pill" hidden>
+    <span id="toast-icon">✓</span>
+    <span id="toast-message">Copied to clipboard!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/vendor/marked.min.js"></script>
+  <script src="/vendor/highlight.min.js"></script>
   <script src="/app.js"></script>
 </body>
 </html>
